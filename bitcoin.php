@@ -1,3 +1,16 @@
+<?php
+	session_start();
+	if (!isset($_SESSION['user_login_status']) AND $_SESSION['user_login_status'] != 1) {
+        header("location: login.php");
+		exit;
+        }
+
+				#Inclusion de archivos de conexion
+			/* Connect To Database*/
+				require_once ("includes/config.php");//Contiene las variables de configuracion para conectar a la base de datos
+				require_once ("includes/conexion.php");//Contiene funcion que conecta a la base de datos
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -51,7 +64,7 @@
             <li>
                     <a href="user.html">
                         <i class="pe-7s-user"></i>
-                        <p>Usuario </p>
+                        <p> <?php  echo "Usuario actual: ".$_SESSION['user_name']; ?> </p>
                     </a>
                 </li>
                 <li class="active">
@@ -112,7 +125,9 @@
 
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                           <!-- Account     -->
+                            <a href="">
+                               Account
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -122,40 +137,58 @@
 
         <div class="content">
             <div class="container-fluid">
+                <!--VALORE DINAMICOS PARA UN K Y J--->
                 <div class="row">
                 <div class="col-md-6">
+                <form class="col-md-12" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                         <div class="card">
                             <div class="header">
                                 <h4 class="title"> Valor del bitcoin </h4>
                                 <p class="category"> Cálculo para los valores de K y J</p>
                             </div>
                             <div class="content">
-                            
+        
                                 <div class=""form-group col-sm-6">
                                         <label for="exampleInputEmail1">Valor de K</label>
-                                        <input type="text" class="form-control" name="Kvalor">
+                                        <input type="text" class="form-control" name="KvalorB">
                                 </div>
 
                                 <div class=""form-group col-sm-6">
                                         <label for="exampleInputEmail1">Valor de J</label>
-                                        <input type="text" class="form-control" name="Kvalor">
+                                        <input type="text" class="form-control" name="JvalorB">
                                 </div>
 
                                 <div class=""form-group col-sm-6">
                                         <label for="exampleInputEmail1">Valor de M (1)</label>
-                                        <input type="text" class="form-control" name="Kvalor">
+                                        <input type="text" class="form-control" name="MvalorB">
                                 </div>
 
                                 <div class=""form-group col-sm-6">
                                         <label for="exampleInputEmail1">Valor de alfa</label>
-                                        <input type="text" class="form-control" name="Kvalor">
+                                        <input type="text" class="form-control" name="AvalorB">
                                 </div>
 
                                 <br>
-                                <button type="button" class="btn btn-primary  pull-right"> Aceptar </button>
+
+                                <div class="form-group">
+                                    <select name="suavizado2" class="form-control">
+                                        <option value="SEPS">Suavizado E. Promedio Simple</option>
+                                        <option value="SEPMS">Suavizado E. Promedio Movil S.</option>
+                                        <option value="SEPMD">Suavizado E. Promedio Doble</option>
+                                        <option value="SEPDA">Suavizado E. Promedio D. Ajustado</option>
+                                        <option value="SEPTMAC">Suavizado E. Promedio TMAC</option>
+                                        </select>
+                                </div>
+
+                                <br>
+                                <button type="submit"  name="submit" class="btn btn-primary fa-pull-right">Evaluar</button>
                                 <br>
                                 <br>
                                 <br>
+                            </form>
+
+                            <?php include('pbitcoin.php'); ?>
+
                             </div>
                         </div>
                     </div>
@@ -163,6 +196,7 @@
             </div>
         </div>
 
+        
 
         <footer class="footer">
             <div class="container-fluid">
@@ -206,6 +240,4 @@
 
 	<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
 	<script src="assets/js/demo.js"></script>
-
-
 </html>
